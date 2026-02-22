@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App de Orientação Alimentar</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f3f7f3;
+      color: #1d2b1f;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(720px, 100%);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(20, 60, 30, 0.12);
+      padding: 24px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin: 16px 0 20px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.95rem;
+    }
+
+    input, select, button {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #bad2bf;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #2f8f46;
+      color: white;
+      border: 0;
+      cursor: pointer;
+      align-self: end;
+    }
+
+    button:hover {
+      background: #287a3c;
+    }
+
+    .resultado {
+      border: 1px dashed #7db487;
+      border-radius: 10px;
+      padding: 14px;
+      background: #f7fcf7;
+      line-height: 1.5;
+    }
+
+    .url {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      color: #35573a;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>App HTML de Orientação Alimentar</h1>
+    <p>Preencha os dados para receber uma recomendação básica (educativa, não médica).</p>
+
+    <form id="formPlano">
+      <label>
+        Idade
+        <input id="idade" type="number" min="1" required />
+      </label>
+
+      <label>
+        Objetivo
+        <select id="objetivo" required>
+          <option value="">Selecione</option>
+          <option value="emagrecer">Emagrecer</option>
+          <option value="manter">Manter peso</option>
+          <option value="ganhar">Ganhar massa</option>
+        </select>
+      </label>
+
+      <label>
+        Nível de atividade
+        <select id="atividade" required>
+          <option value="">Selecione</option>
+          <option value="baixo">Baixo</option>
+          <option value="medio">Médio</option>
+          <option value="alto">Alto</option>
+        </select>
+      </label>
+
+      <button type="submit">Gerar orientação</button>
+    </form>
+
+    <section id="resultado" class="resultado" aria-live="polite">
+      Sua orientação aparecerá aqui.
+    </section>
+
+    <p class="url">
+      URL local sugerida: <strong>http://localhost:8000</strong> (rodando com servidor estático).
+    </p>
+  </main>
+
+  <script>
+    const dicasPorObjetivo = {
+      emagrecer: "Priorize vegetais, proteínas magras e controle porções de carboidratos refinados.",
+      manter: "Monte prato equilibrado: 1/2 vegetais, 1/4 proteína, 1/4 carboidrato integral.",
+      ganhar: "Inclua proteína em todas refeições e aumente calorias com alimentos nutritivos."
+    };
+
+    const ajusteAtividade = {
+      baixo: "Mantenha hidratação e tente 20–30 min de caminhada diária.",
+      medio: "Distribua carboidratos ao longo do dia para melhor energia.",
+      alto: "Reforce pós-treino com proteína + carboidrato para recuperação."
+    };
+
+    document.getElementById("formPlano").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const idade = Number(document.getElementById("idade").value);
+      const objetivo = document.getElementById("objetivo").value;
+      const atividade = document.getElementById("atividade").value;
+
+      const faixa = idade < 18
+        ? "Como você é menor de idade, procure orientação com responsável e profissional de saúde."
+        : "Mantenha regularidade nas refeições e ajuste as quantidades conforme evolução.";
+
+      const mensagem = `Plano inicial: ${dicasPorObjetivo[objetivo]} ${ajusteAtividade[atividade]} ${faixa}`;
+      document.getElementById("resultado").textContent = mensagem;
+    });
+  </script>
+</body>
+</html>
